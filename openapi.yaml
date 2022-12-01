@@ -1,0 +1,652 @@
+openapi: 3.0.3
+info:
+  title: Ultron Master Configruation API
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Ultron API
+  url: http:/bredec.com
+tags:
+  - name: Ultron Core
+    description: Configuration of Ultron
+    externalDocs:
+      description: Find out more
+      url: bredec.com/docs/ultron
+  
+  - name: Module Config
+    description: Configuration of Module
+    externalDocs:
+      description: Find out more
+      url: bredec.com/docs/module
+  
+  - name: Network Config
+    description: Configuration of Network
+    externalDocs:
+      description: Find out more
+      url: bredec.com/docs/network
+  
+  - name: Secrets
+    description: Ultron Secrets
+    externalDocs:
+      description: Find out more
+      url: bredec.com/docs/ultron/secrets
+paths:
+  /UltronCoreConfig:
+    post:
+      tags:
+        - Ultron Core
+      summary: Create a new Ultron Core Configuration
+      description: This call will create a new ultron core configuration
+      operationId: createUltraCoreConfig
+      requestBody:
+        description: Create a new Ultron Core Config
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ultron'
+            example: {
+              "id" : "10-0001",
+              "name": "Test Ultron Core",
+              "version": "0.2.0-alpha.4",
+              "port": "50001",
+              "dns": "testmachine.bredec.it",
+              "network": [
+              "10-0001"
+               ],
+              "modules": null
+            }
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Ultron'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ultron'
+        required: true
+      responses:
+        '200':
+          description:  Ultron Core Config created successfully
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Ultron' 
+              example: {
+                "id" : "10-0001",
+                "name": "Test Ultron Core",
+                "version": "0.2.0-alpha.4",
+                "port": "50001",
+                "dns": "testmachine.bredec.it",
+                "network": [
+                "10-0001"
+                 ],
+                "modules": null
+              }
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Ultron'
+        '405':
+          description: Validation exception
+  /UltronCoreConfig/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: Id of Ultron Core configuration to get
+          required: true
+          schema:
+            type: string
+      tags:
+        - Ultron Core
+      summary: Get a Ultron Core Configuration
+      description: This call will show you the configuration of the ultron core
+      responses:
+        '200':
+          description: get Ultron Core by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ultron'  
+              example: {
+                "ID": "10-0001",
+                "Name": "Ultron Core Test 01",
+                "Version": "0.0.1",
+                "Port": "50006",
+                "DNS": "ultront.bredec.it",
+                "IP": "192.168.1.11",
+                "Network": [
+                "10-0001"
+                 ],
+                "Modules": [
+                "10-0001-0001"
+                 ]
+              }
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Ultron'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Module not found
+        '405':
+          description: Validation exception
+    put:
+      tags:
+        - Ultron Core
+      summary: Update a Ultron Core Configuration
+      description: This call will update the ultron core config
+      operationId: updateUltronCore
+      parameters:
+        - name: id
+          in: path
+          description: ID of Ultron Core to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an exisiting Ultron Core By sending the new version of the core
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ultron'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Ultron'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ultron'
+        required: true
+      responses:
+        '200':
+          description: Ultron Core configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ultron'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Ultron'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Ultron Core configuration not found
+        '405':
+          description: Validation exception
+    delete:
+      parameters:
+        - name: id
+          in: path
+          description: Id of Ultron Core configuration to delete
+          required: true
+          schema:
+            type: string
+      tags:
+         - Ultron Core
+      summary: Delete a Ultron Core configuration
+      description: This call will delete an Ultron Core Configuration
+      operationId: deleteUltronCoreConfig
+      responses:
+        '200':
+          description: Ultron Core configuration deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ultron'
+              example: {
+                "message": "ultron core deleted"
+              }
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Ultron'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Module not found
+        '405':
+          description: Validation exception
+  
+  /ModuleConfig:
+    post:
+      tags:
+        - Module Config
+      summary: Create a new Module Configuration
+      description: Create new module
+      operationId: createModuleConfig
+      requestBody:
+        description: Create a new Module
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Module'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Module'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Module'
+        required: true
+      responses:
+        '200':
+          description: Module created successfully
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Module' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Module'
+        '405':
+          description: Validation exception
+  /Module/Type:
+    get:
+      tags:
+        - Module Config
+      summary: Get all Modules Types
+      description: Get a list of all the available types for a Module
+      operationId: getModulesType
+      responses:
+        '200':
+          description: Module configuration updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                example: {
+                  "101": "UltronModuleExecution",
+                  "102": "UltronModuleExecutionUI",
+                  "103": "UltronModuleMyStrom",
+                  "104": "UltronModuleMyStromUI",
+                  "105": "UltronModuleTerminal",
+                  "106": "UltronModuleTerminalUI",
+                  "107": "UltronModuleGoTask",
+                  "108": "UltronModuleGoTaskUI",
+                  "109": "UltronModuleTerraform",
+                  "110": "UltronModuleTerraformUI"
+                }
+            application/xml:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string   
+  /ModuleConfig/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: ID of Module to get
+          required: true
+          schema:
+            type: string
+      tags:
+        - Module Config
+      summary: Get a Module Configuration
+      description: Get Module by id
+      responses:
+        '200':
+          description: Get Module by id
+          
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Module'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Module not found
+        '405':
+          description: Validation exception
+    put:
+      tags:
+        - Module Config
+      summary: Update a Module configuration
+      description: Update an exisiting Module configuration by Id
+      operationId: updateModuleConfig
+      parameters:
+        - name: id
+          in: path
+          description: ID of Module to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an exisiting Module By sending the new version of the module
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Module'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Module'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Module'
+        required: true
+      responses:
+        '200':
+          description: Module configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Module'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Module configuration not found
+        '405':
+          description: Validation exception
+    delete:
+      parameters:
+        - name: id
+          in: path
+          description: ID of Module to delete
+          required: true
+          schema:
+            type: string
+      tags:
+         - Module Config
+      summary: Delete a Module Configuration
+      description: Delete a module by id
+      operationId: deleteModuleConfig
+      responses:
+        '200':
+          description: Module deleted successfully
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Module' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Module'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Module not found
+        '405':
+          description: Validation exception
+  
+  /NetworkConfig:
+    post:
+      tags:
+        - Network Config
+      summary: Create a Network Configuration
+      description: Create a new Network Config
+      operationId: createNetworkConfig
+      requestBody:
+        description: Create a new Network Config
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Network'
+            example: {
+              "id": "10-0001",
+              "name": "Tets Network"
+            }
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Network'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Network'
+        required: true
+      responses:
+        '200':
+          description:  Network Config created successfully
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Network' 
+              example: {
+                "ID": "10-0010",
+                "Name": "Mac Mini Network",
+                "Ultron": null
+              }
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Network'
+        '405':
+          description: Validation exception
+  /NetworkConfig/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: Id of Network configuration to get
+          required: true
+          schema:
+            type: string
+      tags:
+        - Network Config
+      summary: Get a Network Configuration
+      description: Get Network by id
+      operationId: getNetworkConfig
+      responses:
+        '200':
+          description: get Network by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network'  
+              example: {
+                "ID": "10-0001",
+                "Name": "Test Network",
+                "Ultron": [
+                  "10-0001"
+                ]
+              }
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Network'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Module not found
+        '405':
+          description: Validation exception
+    put:
+      tags:
+        - Network Config
+      summary: Update a Netwrok Configuration
+      description: Update an exisiting Network by Id
+      operationId: updateNetworkConfig
+      parameters:
+        - name: id
+          in: path
+          description: ID of Network configuration to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an exisiting Network configuration By sending the new version of the core
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Network'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Network'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Network'
+        required: true
+      responses:
+        '200':
+          description: Network configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Network'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Ultron Core configuration not found
+        '405':
+          description: Validation exception
+    delete:
+      parameters:
+        - name: id
+          in: path
+          description: Id of Network configuration to delete
+          required: true
+          schema:
+            type: string
+      tags:
+        - Network Config
+      summary: Delete a Network configuration
+      description: Delete an Network configuration by id
+      operationId: deleteNetworkConfig
+      responses:
+        '200':
+          description: Network configuration deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network'
+              example: {
+                "message": "ultron core deleted"
+              }
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Network'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Module not found
+        '405':
+          description: Validation exception
+  
+  /UltronCoreSecrets/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description:  ID of the ultron-core who want genarate the new secrets
+          required: true
+          schema:
+            type: string
+      tags:
+        - Secrets
+      summary: Generate Secrets
+      description: "This call will create a new secret for the ultron core. If you use             this call ultron master will create a new LogonKey and the old one             will be not more valid"
+      responses:
+        '200':
+          description: Generate a Secret for an Ultron Core by id
+          
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Secret'      
+              example: {
+                "id": "10-0001",
+                "masterID": "10",
+                "masterDNS": "ultron.bredec.com",
+                "masterPort": "50006",
+                "logonKey": "*************"
+              }
+                
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Secret'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Module not found
+        '405':
+          description: Validation exception 
+
+components:
+  schemas:
+    Ultron:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "23"
+        name:
+          type: string
+          example: "Ultron Conf Name"
+        version:
+          type: string
+          pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
+          example: "0.2.0-alpha.4"
+        port:
+          type: string
+          pattern: '^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$'
+          example: "8080"
+        dns: 
+          type: string
+          example: "8.8.8.8"
+        ip:
+          type: string
+          pattern: '(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}'
+          example: "192.0.2.44"
+        network:
+            type: array
+            items:
+              type: string
+        modules:
+            type: array
+            items:
+              type: string
+    Module:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          example: "33"
+        name:
+          type: string
+          example: "Module Name"
+        version:
+          type: string
+          pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
+          example: "0.2.0-alpha.4"
+        typeID:
+          type: integer
+          format: int64
+          example: 13
+    Secret:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "33"
+        masterID:
+          type: string
+          example: "32"
+        masterDNS:
+          type: string
+          example: "30"
+        masterPort:
+          type: string
+          pattern: '^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$'
+          example: "9090"
+        logonKey:
+          type: string
+          example: "*****"
+        logLevel:
+          type: string
+          example: "level"
+    Network:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "23"
+        name:
+          type: string
+          example: "Network Conf Name"
+        ultron:
+            type: array
+            items:
+              type: string
