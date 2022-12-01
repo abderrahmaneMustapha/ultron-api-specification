@@ -1,0 +1,182 @@
+asyncapi: 2.4.0
+info:
+  title: Ultron Master Configruation API
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  test:
+    url: berdec.com/ws
+    protocol: wss
+    description: Ultron Status API
+defaultContentType: application/json
+channels:
+  /:
+    publish:
+      operationId: onlineOfflineStatus
+      message:
+        oneOf:
+          - $ref: '#/components/messages/onlineStatu'
+          - $ref: '#/components/messages/detailedStatu'
+    subscribe:
+      operationId: subToStatu
+      message:
+        $ref: '#/components/messages/subStatu'
+components:
+  messages:
+    onlineStatu:
+      name: onlineUltronCore
+      title: Online/Offline Ultron Cores
+      summary: Inform about the offline and the online ultron cores
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/onlinePayload'
+    detailedStatu:
+      name: detailUltronCore
+      title: Detailed  Ultron Core statu
+      summary: Inform about the detailed status of a specific Ultron Core
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/detailedPayload'
+    subStatu:
+      name: joinLeaveUltronCoreStatu
+      title: Get Ultron Core Statu
+      summary: >-
+        join  to get a specific ultron core statu by id, or leave to stop
+        getting the statu messages
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/statuPayload'
+  schemas:
+    onlinePayload:
+      type: object
+      properties:
+        type:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: boolean
+    detailedPayload:
+      type: object
+      properties:
+        type:
+          type: string
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 10-0010
+            hostName:
+              type: string
+              example: Mac-mini.local
+            ip:
+              type: string
+              pattern: >-
+                (\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}
+              example: 255.255.255.255
+            version:
+              type: string
+              pattern: >-
+                ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+              example: 0.2.0-alpha.4
+            latencyMs:
+              type: integer
+              example: 16
+            online:
+              type: boolean
+              example: true
+            uptime:
+              type: integer
+              example: 3431603
+            os:
+              type: string
+              example: darwin
+            kernelVersion:
+              type: string
+              pattern: >-
+                ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+              example: 21.5.0
+            kernelArch:
+              type: string
+              example: arm64
+            platformVersion:
+              type: string
+              pattern: >-
+                ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+              example: '12.4'
+            cpuName:
+              type: string
+              example: Apple M1
+            cpuCores:
+              type: integer
+              example: 8
+            cpuLoad1:
+              type: number
+              example: 1.31396484375
+            cpuLoad5:
+              type: number
+              example: 1.2177734375
+            cpuLoad15:
+              type: number
+              example: 1.1435546875
+            mem:
+              type: number
+              example: 60.96649169921875
+            memTotal:
+              type: number
+              example: 17179869184
+            memUsed:
+              type: number
+              example: 10473963520
+            memFree:
+              type: number
+              example: 6705905664
+            disk:
+              type: number
+              example: 24.374244471263502
+            diskTotal:
+              type: number
+              example: 494384795648
+            diskUsed:
+              type: number
+              example: 120502558720
+            diskFree:
+              type: number
+              example: 373882236928
+            modules:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 10-0010-0107
+                  online:
+                    type: boolean
+                  latencyMS:
+                    type: number
+                    example: 0
+                  lastOnline:
+                    type: string
+                    format: date-time
+                    example: 2022-11-20T16:44:44.324Z
+                  lastUpdate:
+                    type: string
+                    format: date-time
+                    example: 2022-11-20T16:44:44.324Z
+            lastUpdate:
+              type: string
+              format: date-time
+              example: 2022-11-20T16:44:54.281Z
+    statuPayload:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 10-0010
+        type:
+          type: string
+          example: Join
